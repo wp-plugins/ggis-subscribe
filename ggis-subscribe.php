@@ -2,10 +2,10 @@
 /*
 Plugin Name: ggis Subscribe
 Plugin URI: http://dvector.com/oracle/category/ggissubscribe/
-Author URI: http://dvector.com/oracle
 Description: Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 Author: Gary Dalton
-Version: 0.9.0
+Version: 0.9
+Author URI: http://dvector.com/oracle/
 */
 
 /*  Copyright 2008 Gary Dalton  (email : PLUGIN AUTHOR EMAIL)
