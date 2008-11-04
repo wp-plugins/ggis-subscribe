@@ -1,11 +1,10 @@
 === ggis-Subscribe ===
 Contributors: bujanga
-Plugin Name: ggis-Subscribe
-Donate link: None
-Tags: email, subscription, list, form, listserve, subscribe
+Donate link: http://dvector.com/oracle/2008/11/04/donate-to-ggis-plugins-and-modules/
+Tags: email, subscription, list, form
 Requires at least: 2.5
 Tested up to: 2.6.2
-Stable tag: 0.9.0
+Stable tag: 0.9
 
 Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 
@@ -18,8 +17,8 @@ ggis-Subscribe gives authors an easy way to insert a form that performs emailing
 + Wordpress 2.5 or greater
 + Designation of success page
 + An email list to subscribe to. Currently supports:
-1. ezmlm lists - subscribe by sending email to `listname-subscribe-your=address.com@domain.com`
-2. mailman lists - subscribe by sending email to `listname-request@domain.com`
+1. ezmlm lists - subscribe by sending email to listname-subscribe-your=address.com@domain.com
+2. mailman lists - subscribe by sending email to listname-request@domain.com
 
 == Installation ==
 
@@ -56,8 +55,8 @@ You should be able to fully control your form's appearance using CSS. The HTML o
 
 == Screenshots ==
 
-1. The subscription management form.
-2. The ggis Subscribe Settings page.
+1. A screenshot of the subscription management form, screen1.png.
+2. A screenshot of the ggis Subscribe Settings page, screen2.png
 
 == Usage ==
 
