@@ -3,7 +3,7 @@ Contributors: bujanga
 Donate link: http://dvector.com/oracle/2008/11/04/donate-to-ggis-plugins-and-modules/
 Tags: email, subscription, list, form
 Requires at least: 2.5
-Tested up to: 2.6.2
+Tested up to: 2.7
 Stable tag: 0.9
 
 Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
