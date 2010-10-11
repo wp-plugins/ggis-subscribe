@@ -33,8 +33,9 @@ ggis-Subscribe gives authors an easy way to insert a form that performs emailing
 1. Download and unzip the plugin
 2. Upload the ggis-subscribe to the '/wp-content/plugins/' directory
 3. Activate the plugin through the 'Plugins' menu in WordPress
-4. Edit the ggis Subscibe options from the Settings menu.
+4. Edit the ggis Subscribe options from the Settings menu.
 * Add the email address of your mailing list. If you have more than one list, use commas between each address.
+* If you prefer a nickname instead of the email address to show in the subscription form, precede the list address with the Nickname and a colon(:).
 * Enter the URL of your thank you page (next page)
 * Enter the URL of you main subscription management page.
 + Yes. Create and publish your subscription management first and then finish with your ggisSubscribe options.	
