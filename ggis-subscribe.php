@@ -4,11 +4,11 @@ Plugin Name: ggis Subscribe
 Plugin URI: http://dvector.com/oracle/category/ggissubscribe/
 Description: Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 Author: Gary Dalton
-Version: 0.9
+Version: 1.0.0
 Author URI: http://dvector.com/oracle/
 */
 
-/*  Copyright 2008 Gary Dalton  (email : PLUGIN AUTHOR EMAIL)
+/*  Copyright 2008-2010 Gary Dalton  (email : PLUGIN AUTHOR EMAIL)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,6 +44,8 @@ if (!class_exists("ggisSubscribe")) {
 			formAction - URL to post form to.
 			maillist - Which mailing list the subscription is for. [validated]
 				listname@npexchange.org
+			nickname - Nickname for the mailing list [optional]
+				List Name
 			action - Subscribe or unsubscribe [validated]
 			email - Email address to manage [validated
 			name - Subscriber's name [optional] [validated]
@@ -55,9 +57,6 @@ if (!class_exists("ggisSubscribe")) {
 				ezmlm, mailman
 		*/
 
-		
-		
-//		var $formAction = 'http://dvector.com/ggis_wp-subscribe.php';
 		var $formAction = '';
 		var $maillist;
 		var $nextpage;
@@ -69,11 +68,10 @@ if (!class_exists("ggisSubscribe")) {
 		
 
 		function ggisSubscribe() { //constructor
-//			$this->formAction = 'http://dvector.com/ggis_wp-subscribe.php';
 //			$this->formAction = WP_PLUGIN_URL . '/ggis_wp-subscribe.php';
 		}
 		function addHeaderCode(){
-			echo '<!-- ggisSubscribe Plugin - Copyright 2008 - GGIS -->';
+			echo '<!-- ggisSubscribe Plugin - Copyright 2008-2010 - GGIS -->';
 		}
 		
 		// OUTPUT FUNCTIONS
@@ -113,6 +111,16 @@ if (!class_exists("ggisSubscribe")) {
 			$listonly = NULL;
 			$options = unserialize( get_option( 'ggis-Subscribe'));
 			$options['maillists'] = explode( ',', $options['maillists'] );
+			if ( isset($options['nicknames']) )
+				$options['nicknames'] = explode( ',', $options['nicknames'] );
+			// Set nicknames - starting in v 1.0
+			foreach( $options['maillists'] as $key=>$val ){
+				if ( !(isset($options['nicknames'][$key]) && !empty($options['nicknames'][$key])) ){
+					$options['nicknames'][$key] = $val;
+				}
+				unset($key);
+				unset($val);
+			}
 			$id = (int) $matches[1];
 			
 			// DETERMINE FORM TYPE
@@ -150,15 +158,18 @@ if (!class_exists("ggisSubscribe")) {
 						if ( $key == 0 ){
 							$list_select .= ' SELECTED';
 						}
-						$list_select .= ">$list</option>";
+						$list_select .= '>'.$options['nicknames'][$key].'</option>';
 					}
 					$list_select .= '</select>';
 				}
 			}
 
 			if ( $id == 0){
+				if ( !isset($options['formtitle']) ){
+					$options['formtitle'] = 'Subscription Management';
+				}
 				// LONG FORM
-				$form .= '<fieldset><legend>Subscription Management</legend>
+				$form .= '<fieldset><legend>' . $options['formtitle'] . '</legend>
 						<p class="ggis-subscribe-form">';
 				$form .= $list_select;
 				$form .= '</p><p>&nbsp;Action:<br>
@@ -194,6 +205,18 @@ if (!class_exists("ggisSubscribe")) {
 		function form_ggissubscribe_options(){
 			$form = '';
 			$options = unserialize( get_option( 'ggis-Subscribe'));
+			$options['maillists'] = explode( ',', $options['maillists'] );
+			$options['nicknames'] = explode( ',', $options['nicknames'] );
+			$nicklist = '';
+			foreach ( $options['maillists'] as $key=>$val ){
+				if ( $key > 0 ) $nicklist .= ',';
+				if ( isset($options['nicknames'][$key]) && !empty($options['nicknames'][$key]) ){	// Not set until version 1.0
+					$nicklist .= $options['nicknames'][$key] . ':';
+				}
+				$nicklist .= $val;
+			}
+			unset($key);
+			unset($val);
 			
 			$list_select .= 'Which list manager?<br>
 							<select name="ggissubscribe_managertype">';
@@ -214,14 +237,20 @@ if (!class_exists("ggisSubscribe")) {
 			$form .= '<form method="post">';
 			$form .= wp_nonce_field('ggis-subscribe-update-options_base');
 			$form .= '<fieldset><legend>Mailing List Options</legend>
-						<p>All fields are required.</p>
-						<p>';
+						<p>All fields are required.</p>';
+			$form .= '<p>
+						Title of the Subscription Maangement form<br />
+						(leave blank for no title)<br />';
+			$form .= '<input type="text"  size="60" name="ggissubscribe_formtitle" value="' . $options['formtitle'] . '">';
+			$form .= '</p>';
+			
+			$form .= '<p>';
 			$form .= $list_select;
 			$form .= '</p>
 						<p>
-						Mailing List Address (comma separated)<br />
-						example: maillist@npexchange.org,list2@npexchange.org<br />';
-			$form .= '<textarea cols="60" rows="4" name="ggissubscribe_maillists">'. $options['maillists'] .'</textarea>';
+						Mailing List Nickname and Address (nickname is optional)(colon and comma separated)<br />
+						example: Mail List:maillist@npexchange.org,List 2:list2@npexchange.org<br />';
+			$form .= '<textarea cols="60" rows="4" name="ggissubscribe_maillists">'. $nicklist .'</textarea>';
 			$form .= '</p>
 						<p>
 						URL of page to go to upon success<br />
@@ -237,7 +266,32 @@ if (!class_exists("ggisSubscribe")) {
 						<input type="hidden" name="page_options" value="ggissubscribe_maillists,ggissubscribe_nextpage,ggissubscribe_formurl" />
 						<p class="submit">';
 			$form .= '<input type="submit" name="submit" value="Save Changes" /></p>
-						</fieldset>';
+						</fieldset></form>';
+			$plugin_info = '
+<h3>plugin Usage and Information</h3>
+<p>version 1.0.0</p>
+<h4>Usage</h4>
+<p>A subscription form may be inserted on a post, page, or text widget by including the following code in your text.
+<br><br>[-ggis-subscribe %formtype &quot;%listname&quot;-]
+<br><br>Here is an explanation of the fields:</p>
+<ol>
+	<li><p>ggis-subscribe - identifies the code (required)</p>
+	<li><p>formtype - identifies the form type</p>
+	<ul>
+		<li><p>0, default - full subscription management form</p>
+		<li><p>1 - subscribe only form, requires &quot;listname&quot;</p>
+	</ul>
+	<li><p>listname - identifies the list to  include in a subscription only form</p>
+</ol>
+<h4>In a Widget?</h4>
+<p>A subscription form may be placed into the standard text widget using the methods above. For widget use, I suggest using only formtype=1, the short form.</p>
+<h4>More information</h4>
+<p>Visit the following for more information:</p>
+<ul>
+	<li><p><a href="http://wordpress.org/extend/plugins/ggis-subscribe/">http://wordpress.org/extend/plugins/ggis-subscribe/</a></p>
+	<li><p><a href="http://dvector.com/oracle/ggis-subscribe/">http://dvector.com/oracle/ggis-subscribe/</a></p>
+</ul>';			
+			$form .= $plugin_info;
 						
 			return $form;
 		}
@@ -266,17 +320,37 @@ if (!class_exists("ggisSubscribe")) {
 				$msg .= '<p>Manager type is required.</p>';
 			}
 			
+			if ( $_POST['ggissubscribe_formtitle'] ) {
+				$options['formtitle'] = htmlentities($_POST['ggissubscribe_formtitle']);
+			}else {
+				$options['formtitle'] = '';
+			}
+			
 			if ( $_POST['ggissubscribe_maillists'] ) {
 				$maillists = explode(',', $_POST['ggissubscribe_maillists']);
 				foreach ( $maillists as $key => $val ){
-					$val = trim( strtolower( $val));
-					$maillists[$key] = $val;
-					if ( !is_email( $val) ){
-						$msg .= "<p>Please enter a valid email address for the mailing list. Your invalid entry was $val</p>";
-						unset( $maillists[$key]);
+					$pair = explode(':', $val);
+					if ( count($pair) == 2){
+						$maillists[$key] = trim(strtolower($pair[1]));
+						if ( !is_email( $maillists[$key]) ){
+							$msg .= "<p>Please enter a valid email address for the mailing list. Your invalid entry was $val</p>";
+							unset( $maillists[$key]);
+						}else{
+							$nicknames[$key] = trim($pair[0]);
+						}
+					}else{
+						$val = trim( strtolower( $val));
+						$maillists[$key] = $val;
+						if ( !is_email( $val) ){
+							$msg .= "<p>Please enter a valid email address for the mailing list. Your invalid entry was $val</p>";
+							unset( $maillists[$key]);
+						}else{
+							$nicknames[$key] = NULL;
+						}
 					}
 				}
 				$options['maillists'] = implode( ',', $maillists);
+				$options['nicknames'] = implode( ',', $nicknames);
 			} else {
 				$msg .= '<p>Mailing list entries are required.</p>';
 			}
