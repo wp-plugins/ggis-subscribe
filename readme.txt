@@ -15,7 +15,7 @@ ggis-Subscribe gives authors an easy way to insert a form that performs emailing
 == ChangeLog ==
 
 = 1.0.1 =
-* UPDATE:	Change mail function to use the WordPress functino wp_mail()
+* UPDATE:	Change mail function to use the WordPress function wp_mail()
 
 = 1.0.0 =
 * NEW:	Add Plugin Usage and Information to the admin options page
