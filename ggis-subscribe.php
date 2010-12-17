@@ -4,7 +4,7 @@ Plugin Name: ggis Subscribe
 Plugin URI: http://dvector.com/oracle/category/ggissubscribe/
 Description: Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 Author: Gary Dalton
-Version: 1.0.0
+Version: 1.0.1
 Author URI: http://dvector.com/oracle/
 */
 
@@ -517,7 +517,8 @@ if (!class_exists("ggisSubscribe")) {
 				$ar_mailing = unserialize($ar_mailing);
 			
 				// Do it
-				mail($ar_mailing['to'], $ar_mailing['subject'], $ar_mailing['message']);
+				//mail($ar_mailing['to'], $ar_mailing['subject'], $ar_mailing['message']);
+				wp_mail( $ar_mailing['to'], $ar_mailing['subject'], $ar_mailing['message'] );
 				
 				// Go to next page
 				header("Location: $nextpage");
