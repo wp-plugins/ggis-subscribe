@@ -440,7 +440,7 @@ if (!class_exists("ggisSubscribe")) {
 		*		mailto - Fully formatted email address to process request. [internal]
 		*		errmsg - Message array for the user when some of the input valuse are invalid. [internal]
 		*/
-				
+		
 			if ( !isset($_POST['formtype']) ){
 				return;
 			}
@@ -586,11 +586,12 @@ if (!class_exists("ggisSubscribe")) {
 		*	START formatEzmlm FUNCTION
 		*/
 		function formatEzmlm($serialized_string){
-			$body = NULL;
 			$ar_mailing = unserialize( $serialized_string );
 			
 			// Properly format email
 			$email = str_replace('@', '=', $ar_mailing['email']);
+			// Format body
+			$body = $ar_mailing['action'] . ' address=' . $ar_mailing['email'];
 			// Create mailto
 			$mailto = str_replace('@', '-'. $ar_mailing['action'] .'-'. $email . '@', $ar_mailing['maillist']);
 			$ar_mailing = serialize( array(
