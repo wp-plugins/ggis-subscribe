@@ -3,8 +3,8 @@ Contributors: bujanga
 Donate link: http://dvector.com/oracle/2008/11/04/donate-to-ggis-plugins-and-modules/
 Tags: email, subscription, list, form
 Requires at least: 2.5
-Tested up to: 3.0.3
-Stable tag: 1.0.1
+Tested up to: 3.2.1
+Stable tag: 1.0.2
 
 Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 
@@ -13,6 +13,9 @@ Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post
 ggis-Subscribe gives authors an easy way to insert a form that performs emailing list subscription management. Simply add [-ggis-subscribe-] to your post and it will create an email list subscription management form. Depending on the settings and parameters you choose, it will insert either a short form, just an email address box with submit button or a full management form.
 
 == ChangeLog ==
+
+= 1.0.2 =
+* FIX:	WordPress function wp_mail() now requires body content. Plugin now insures body content.
 
 = 1.0.1 =
 * UPDATE:	Change mail function to use the WordPress function wp_mail()
