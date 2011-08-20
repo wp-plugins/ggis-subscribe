@@ -4,7 +4,7 @@ Plugin Name: ggis Subscribe
 Plugin URI: http://dvector.com/oracle/category/ggissubscribe/
 Description: Manages subscriptions to email lists. Simply add [-ggis-subscribe-] to your post.
 Author: Gary Dalton
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://dvector.com/oracle/
 */
 
@@ -109,7 +109,9 @@ if (!class_exists("ggisSubscribe")) {
 			// GET AND SET VARIABLES
 			$list_select = '';
 			$listonly = NULL;
-			$options = unserialize( get_option( 'ggis-Subscribe'));
+			$options = get_option( 'ggis-Subscribe');
+			if ( !is_array($options) )
+				$options = unserialize($options);
 			$options['maillists'] = explode( ',', $options['maillists'] );
 			if ( isset($options['nicknames']) )
 				$options['nicknames'] = explode( ',', $options['nicknames'] );
@@ -204,7 +206,9 @@ if (!class_exists("ggisSubscribe")) {
 		
 		function form_ggissubscribe_options(){
 			$form = '';
-			$options = unserialize( get_option( 'ggis-Subscribe'));
+			$options = get_option( 'ggis-Subscribe');
+			if ( !is_array($options) )
+				$options = unserialize($options);
 			$options['maillists'] = explode( ',', $options['maillists'] );
 			$options['nicknames'] = explode( ',', $options['nicknames'] );
 			$nicklist = '';
@@ -378,7 +382,7 @@ if (!class_exists("ggisSubscribe")) {
 				$msg = '<div id="message" class="error fade">'. $msg . '</div>';
 			}
 			if ( !is_null( $options) ){
-				update_option( 'ggis-Subscribe', serialize( $options));
+				update_option( 'ggis-Subscribe', $options);
 				$msg .= '<div id="message" class="updated fade"><p>Options saved.</p></div>';
 			}
 			return $msg;
@@ -464,7 +468,9 @@ if (!class_exists("ggisSubscribe")) {
 				'formurl'	=> '<p>The Form URL is not valid. Please contact the site owner.</p>'
 				);
 			$ar_mailing = NULL;
-			$options = unserialize( get_option( 'ggis-Subscribe'));
+			$options = get_option( 'ggis-Subscribe');
+			if ( !is_array($options) )
+				$options = unserialize($options);
 			
 			if ( $_POST['formtype'] != $formtype ) return;
 			
